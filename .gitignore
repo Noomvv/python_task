@@ -8,3 +8,6 @@ __pycache__/
 # Виртуальные окружения
 venv/
 .venv/
+
+# db
+reminders.db
