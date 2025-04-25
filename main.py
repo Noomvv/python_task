@@ -11,6 +11,7 @@ print("Бот запущен")
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.from_user.id, f"Приветствую тебя {message.from_user.first_name}!")
+    bot.send_message(message.from_user.id, f"Привет {message.from_user.first_name}!")
+    print(message.from_user.id, message.from_user.username)
     
 bot.polling(none_stop=True)
