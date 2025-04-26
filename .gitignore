@@ -10,4 +10,4 @@ venv/
 .venv/
 
 # db
-reminders.db
+remind.db

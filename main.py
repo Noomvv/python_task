@@ -6,11 +6,12 @@ import os
 from dotenv import load_dotenv
 
 # База данных
-connection = sqlite3.connect('reminders.db')
+connection = sqlite3.connect('remind.db')
 sql = connection.cursor()
-sql.execute('CREATE TABLE IF NOT EXISTS reminders (id INTEGER PRIMARY KEY, user_id INTEGER, reminder TEXT, time TEXT)')
+sql.execute('CREATE TABLE IF NOT EXISTS reminders (id INTEGER PRIMARY KEY, user_id INTEGER, reminder TEXT, time TEXT, status TEXT)')
 connection.commit()
 connection.close()
+print("База данных создана")
 
 load_dotenv()
 
@@ -21,7 +22,7 @@ print("Бот запущен")
 # Стартовое сообщение
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.from_user.id, f"Привет {message.from_user.first_name}👽\nЯ бот для напоминаний.")
+    bot.send_message(message.from_user.id, f"Привет {message.from_user.first_name}👽")
     print(message.from_user.id, message.from_user.username)
     time.sleep(1)
     bot.send_message(message.from_user.id, "Отправь мне:\n/remind - создать напоминие\n/show - посмотреть все напоминания")
