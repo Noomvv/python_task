@@ -46,4 +46,10 @@ def get_remind_time(message, reminder_text_from_prev_step):
     bot.send_message(message.from_user.id, "Напоминание создано")
     print('Все в порядке, продолжаем:)')
 
+@bot.message_handler(commands=['show'])
+
+def  show_reminders(message):
+    remind = sql.execute('SELECT reminder, time FROM reminders WHERE user_id = ? AND status = ?', (message.from_user.id, 'active')).fetchall()
+    bot.send_message(message.from_user.id, remind)
+
 bot.polling(none_stop=True)

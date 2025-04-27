@@ -11,3 +11,4 @@ venv/
 
 # db
 remind.db
+users.db
