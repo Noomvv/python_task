@@ -1,7 +1,8 @@
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot import types
 
 
-def remind_keyboard():
-    kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    kb.add(KeyboardButton('Напомнить'))
+def remind_button():
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    remind_btn = types.KeyboardButton('Напомнить')
+    kb.add(remind_btn)
     return kb
