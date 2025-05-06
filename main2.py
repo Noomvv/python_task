@@ -1,32 +1,32 @@
-import telebot
-import time
-import threading
 import os
+import threading
 from dotenv import load_dotenv
+import telebot, buttons
+from buttons import remind_button
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 bot = telebot.TeleBot(API_TOKEN)
-print('Бот запущен')
-
-reminders = {}
-
-def reminder_thread(chat_id, message, delay):
-    time.sleep(delay)
-    bot.send_message(chat_id, message)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, f"Привет {message.from_user.first_name}👽\n/remind")
+    bot.send_message(message.from_user.id, f"Привет, {message.from_user.first_name}! 👽", reply_markup=buttons.remind_button())
 
-@bot.message_handler(commands=['remind'])
-def set_reminder(message):
-    bot.reply_to(message, "Напиши время в секундах и сообщение")
+@bot.message_handler(content_types=['text'])
+def ask_text(message):
+    remind_text = bot.send_message(message.from_user.id, "Что тебе напомнить?")
+    bot.register_next_step_handler(remind_text, ask_delay)
 
-    delay = int()
-    chat_id = message.chat.id
+def ask_delay(message):
+    reminder_text = message.text
+    delay_text = bot.send_message(message.from_user.id, "Через сколько секунд напомнить?")
+    bot.register_next_step_handler(delay_text, set_reminder, reminder_text)
+
+def set_reminder(message, reminder_text):
+    delay = int(message.text)
+    t = threading.Timer(delay, lambda: bot.send_message(message.from_user.id, reminder_text))
+    t.start()
+    bot.send_message(message.from_user.id, "Готово!")
     
-    threading.Thread(target=reminder_thread, args=(chat_id, message, delay)).start()
-    bot.reply_to(message, "Напоминание установлено")
-
+print("Бот запущен")
 bot.polling(none_stop=True)
