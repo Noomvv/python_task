@@ -20,11 +20,13 @@ def ask_text(message):
 def ask_delay(message):
     reminder_text = message.text
     delay_text = bot.send_message(message.from_user.id, "Через сколько секунд напомнить?")
-    bot.register_next_step_handler(delay_text, reminder_text, set_reminder)
+    bot.register_next_step_handler(delay_text, set_reminder, reminder_text)
 
 def set_reminder(message, reminder_text):
     delay = int(message.text)
-    threading.Timer(delay, bot.send_message(message.from_user.id, reminder_text).start()
-                    bot.send_message(message.from_user.id, "Готово!"))
-
+    t = threading.Timer(delay, lambda: bot.send_message(message.from_user.id, reminder_text))
+    t.start()
+    bot.send_message(message.from_user.id, "Готово!")
+    
+print("Бот запущен")
 bot.polling(none_stop=True)
